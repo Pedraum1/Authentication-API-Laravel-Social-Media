@@ -37,6 +37,11 @@ class UserModel extends Model
         return True;
     }
 
+    public static function getNotVerifiedUser()
+    {
+        return UserModel::where('deleted_at',null)->where('email_verified_at',null);
+    }
+
     public static function getAliveUser(){
         return UserModel::where('deleted_at',null)->where('active',1)->whereNotNull('email_verified_at')->get();
     }

@@ -54,7 +54,7 @@ class AuthClass {
   }
 
   public static function validateUserEmail($token){
-    $user = UserModel::where('deleted_at',null)->where('email_verified_at',null)->where('validation_token',$token)->first();
+    $user = UserModel::getNotVerifiedUser()->where('validation_token',$token)->first();
     if($user){
       $user->email_verified_at = Carbon::now();
       $user->save();

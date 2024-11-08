@@ -10,4 +10,4 @@ Route::get('/status', function(){
 
 Route::post('/login',[AuthenticationController::class,'login']);
 Route::post('/register',[AuthenticationController::class,'register']);
-Route::get('/validation/{token}',[AuthenticationController::class,'validatingEmail'])->name('validation');
+Route::get('/validation/{token}',[AuthenticationController::class,'validatingEmail']);

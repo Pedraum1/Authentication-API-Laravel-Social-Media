@@ -48,12 +48,4 @@ class UserModel extends Model
     public function profile_image(): HasOne {
         return $this->hasOne(ImageModel::class,'source_id','id')->where('deleted_at',null)->where('type','profile');
     }
-
-    public function banner_image(): HasOne {
-        return $this->hasOne(ImageModel::class,'source_id','id')->where('deleted_at',null)->where('type','banner');
-    }
-
-    public function posts(): HasMany{
-        return $this->hasMany(PostModel::class,'user_id','id')->where('deleted_at',null)->where('type','post')->orderBy('created_at','desc');
-    }
 }

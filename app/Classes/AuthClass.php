@@ -32,6 +32,11 @@ class AuthClass {
     return False;
   }
 
+  public static function updateLastLogin(UserModel $user){
+    $user->last_login = Carbon::now();
+    $user->save();
+  }
+
   public static function createNewUser(Request $request){
     $user = new UserModel();
 

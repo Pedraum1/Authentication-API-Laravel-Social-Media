@@ -21,7 +21,7 @@ class UserModel extends Model
      * @return true|false|UserModel
      */
     public static function getLoginOrUser($email,$password,$option=False){
-        $possible_user = UserModel::where('deleted_at',null)->where('email',$email)->first();
+        $possible_user = UserModel::getAliveUser()->where('email',$email)->first();
         if(empty($possible_user)){
             return False;
         }

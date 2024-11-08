@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\ApiClass;
 use App\Classes\AuthClass;
+use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\LoginRequest;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
 
@@ -23,12 +26,13 @@ class AuthenticationController extends Controller
         return redirect()->back()->withInput()->with(['validation_errors'=>True]);
     }
 
-    public function register(Request $request){
-        AuthClass::validateRegister($request);
+    public function register(RegisterRequest $request){
+        $request->validated();
+        
         $user = AuthClass::createNewUser($request);
         AuthClass::sendValidationEmailTo($user);
 
-        return redirect()->route('validation_sended')->with(['email_validation'=>$user->email]);
+        return ApiClass::success($user->email);
     }
 
     public function logout(){
@@ -44,10 +48,5 @@ class AuthenticationController extends Controller
         }
         return abort(404);
         //TODO: ADD ERROR ON VALIDATING USER EMAIL RESPONSE
-    }
-
-    public function emailValidationPage(){
-        $email = session('email_validation');
-        return view('auth.emailValidation',['email'=>$email]);
     }
 }

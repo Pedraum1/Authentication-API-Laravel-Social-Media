@@ -11,19 +11,23 @@ use Illuminate\Http\Request;
 
 class AuthenticationController extends Controller
 {
-    public function login(Request $request){
-        AuthClass::validateLogin($request);
+    public function login(LoginRequest $request){
+        $request->validated();
+
         if(AuthClass::existsUserWithThisLogin($request)){
+
             $email = $request->input('emailInput');
             $password = $request->input('passwordInput');
             $user = UserModel::getLoginOrUser($email,$password,True);
+
             if(!$user){
-                return redirect()->back()->withInput()->with(['validation_errors'=>True]);
+                return ApiClass::error('Username or Password wrong');
             }
-            session(['user'=>AuthClass::getUserInfos($user)]);
-            return redirect()->route('home');
+            AuthClass::updateLastLogin($user);
+            return ApiClass::success('Login successful');
         }
-        return redirect()->back()->withInput()->with(['validation_errors'=>True]);
+
+        return ApiClass::error('Username or Password wrong');
     }
 
     public function register(RegisterRequest $request){

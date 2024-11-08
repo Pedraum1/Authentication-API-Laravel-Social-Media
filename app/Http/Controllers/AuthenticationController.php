@@ -28,25 +28,19 @@ class AuthenticationController extends Controller
 
     public function register(RegisterRequest $request){
         $request->validated();
-        
+
         $user = AuthClass::createNewUser($request);
         AuthClass::sendValidationEmailTo($user);
 
         return ApiClass::success($user->email);
     }
 
-    public function logout(){
-        session()->forget('user');
-        return redirect()->route('index');
-    }
-
     public function validatingEmail($token){
         $user = AuthClass::validateUserEmail($token);
         if($user){
-            session(['user'=>AuthClass::getUserInfos($user)]);
-            return redirect()->route('home');
+            return ApiClass::success($user);
         }
-        return abort(404);
+        return ApiClass::error('Not cabapable to Validate Email');
         //TODO: ADD ERROR ON VALIDATING USER EMAIL RESPONSE
     }
 }
